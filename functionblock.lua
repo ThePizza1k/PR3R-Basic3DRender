@@ -91,8 +91,8 @@ function b3d_rotobj(object,x,y,z,v) -- allows rotation of object on arbitrary ax
     b3d_vecuse = {x/b3d_srtv,y/b3d_srtv,z/b3d_srtv}
   end
   local b3d_qvec = qtnew(0,b3d_vecuse[1],b3d_vecuse[2],b3d_vecuse[3])
-  local b3d_sin = qtnew(math.sin(v),0,0,0)
-  b3d_qvec = qtadd((math.cos(v)),(qtmul(b3d_sin,b3d_qvec))) -- not sure about order, quaternion multiplication is non-commutative
+  local b3d_sin = qtnew(math.sin(v/2),0,0,0)
+  b3d_qvec = qtadd((math.cos(v/2)),(qtmul(b3d_sin,b3d_qvec))) -- not sure about order, quaternion multiplication is non-commutative
   local b3d_inv = qtinv(b3d_qvec) -- get inverse
   
   b3d_newobject = {}
