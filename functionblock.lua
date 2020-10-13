@@ -1,6 +1,4 @@
 -- initialize camera vars & constants
-
-b3d_pi = math.pi() -- defines pi if it becomes necessary
 -- b3dcam_ is a prefix before properties of the camera
 b3dcam_pos = {0,0,0} -- defined as a coordinate in 3d space (x,y,z)
 b3dcam_rot = 0 -- defined in radians
@@ -9,13 +7,19 @@ camera only rotates on one axis (left or right)
 this makes things easier on me and i dont have to implement proper 3d rotation
 and complex numbers are cool and i can just use those :)
 ]]--
-b3dcam_foclength = 100 -- defines a constant addition to perspective var to make things look right.
+b3dcam_foclength = 200 -- defines a constant addition to perspective var to make things look right.
+b3dcam_zoom = 10 -- makes thing bigger
 qtnew = quaternion.new
 qtadd = quaternion.add
 qtmul = quaternion.mul
 qtinv = quaternion.inv
 cxnew = complex.new
 cxmul = complex.mul
+
+
+function b3drnd(x)
+  return math.floor(x+0.5)
+end
 
 
 
@@ -36,7 +40,7 @@ function b3d_camrot(r) -- rotates camera by given rotation
 end
 
 function b3d_mapto2d(x,y,z) -- maps 3d point to 2d based on given 3d coordinates
-  return {(x / (math.abs(z) + b3dcam_foclength)),(y / (math.abs(z) + b3dcam_foclength))}
+  return {((b3dcam_zoom * x) / (math.abs(z) + b3dcam_foclength))+35,((b3dcam_zoom * y) / (math.abs(z) + b3dcam_foclength))+22}
 end
 
 b3d_ntabletri = {2,3,1}
@@ -60,7 +64,7 @@ function b3d_drawobj(object,x,y,z)
       local b3d_posdraw = {b3d_mapto2d(b3d_ptrans[1][1],b3d_ypos[1],b3d_ptrans[1][2]),b3d_mapto2d(b3d_ptrans[2][1],b3d_ypos[2],b3d_ptrans[2][2]), b3d_mapto2d(b3d_ptrans[3][1],b3d_ypos[3],b3d_ptrans[3][2])}
       for g=1,3,1 do
         if b3d_ptrans[g][2] > 0 and b3d_ptrans[b3d_ntabletri[g]][2] > 0 and object[i][1][2][g] then
-          draw_line(b3d_posdraw[g][1],b3d_posdraw[g][2],b3d_posdraw[b3d_ntabletri[g]][1],b3d_posdraw[b3d_ntabletri[g]][2],object[i][1][3])
+          draw_line(b3drnd(b3d_posdraw[g][1]),b3drnd(b3d_posdraw[g][2]),b3drnd(b3d_posdraw[b3d_ntabletri[g]][1]),b3drnd(b3d_posdraw[b3d_ntabletri[g]][2]),object[i][1][3])
         end
       end
     elseif b3d_objtype == 1 then
@@ -141,6 +145,44 @@ function b3d_scaleobj(object,scf) -- scale given object by given amount
   end
   return b3d_newobject
 end
+
+player.alert([[
+b3d library
+
+basic 3-dimensional display library for pr3
+
+
+camera & internal functions
+
+b3d_camsetpos(x,y,z)
+sets position of camera in 3d space
+
+b3d_cammove(x,y,z)
+moves position of camera in 3d space relative to current location
+
+b3d_setcamrot(r)
+sets camera rotation to given value in radians
+
+b3d_camrot(r)
+rotates camera by given value in radians from current rotation.
+
+b3d_mapto2d(x,y,z)
+maps given 3d point to two dimensions. used internally.
+
+
+drawing functions
+
+b3d_drawobj(object,x,y,z)
+draws given object at given coordinates
+
+b3d_rotobj(object,x,y,z,v)
+rotates given object on given arbitrary (x,y,z) by given amount
+
+b3d_scaleobj(object,sc)
+scales given object by given amount
+
+]])
+
 
 
 
