@@ -83,7 +83,7 @@ function b3d_drawobj(object,x,y,z)
   end
 end
 
-function b3d_rotobj(object,x,y,z,v) -- allows rotation of object on arbitrary axis by given amount in radians
+function b3d_rotobj(object,x,y,z,v) -- allows rotation of object on given arbitrary axis by given amount in radians
   local b3d_vto1 = (x^2) + (y^2) + (z^2)
   local b3d_vecuse = {x,y,z}
   if b3d_vto1 ~= 1 then -- makes sure vector is on unit sphere
@@ -92,25 +92,56 @@ function b3d_rotobj(object,x,y,z,v) -- allows rotation of object on arbitrary ax
   end
   local b3d_qvec = qtnew(0,b3d_vecuse[1],b3d_vecuse[2],b3d_vecuse[3])
   local b3d_sin = qtnew(math.sin(v/2),0,0,0)
-  b3d_qvec = qtadd((math.cos(v/2)),(qtmul(b3d_sin,b3d_qvec))) -- not sure about order, quaternion multiplication is non-commutative
+  b3d_qvec = qtadd(qtnew(math.cos(v/2),0,0,0),(qtmul(b3d_sin,b3d_qvec))) -- not sure about order, quaternion multiplication is non-commutative
   local b3d_inv = qtinv(b3d_qvec) -- get inverse
-  
-  b3d_newobject = {}
+  --[[
+    (b3d_qvec*b3d_qpnt)
+  ]]--
+  local b3d_newobject = {}
   for i in ipairs(object) do
-    local b3d_objpart = {object[i][1],{},{},{}} -- will append to new object
     if object[i][1][1] == 0 then -- triangle
+      local b3d_qobjadd = {object[i][1],{},{},{}}
       for j=2,4,1 do 
         local b3d_qpnt = qtnew(0,object[i][j][1],object[i][j][2],object[i][j][3]) -- creates quaternion from point
-
+        local b3d_tpoint = qtmul(qtmul(b3d_qvec,b3d_qpnt),b3d_inv)
+        b3d_qobjadd[j] = {b3d_tpoint[2],b3d_tpoint[3],b3d_tpoint[4]}
       end
+      table.insert(b3d_newobject,b3d_qobjadd)
     elseif object[i][1][1] == 1 then -- quadrilateral
+      local b3d_qobjadd = {object[i][1],{},{},{},{}}
       for j=2,5,1 do 
         local b3d_qpnt = qtnew(0,object[i][j][1],object[i][j][2],object[i][j][3])
+        local b3d_tpoint = qtmul(qtmul(b3d_qvec,b3d_qpnt),b3d_inv)
+        b3d_qobjadd[j] = {b3d_tpoint[2],b3d_tpoint[3],b3d_tpoint[4]}
+      end
+      table.insert(b3d_newobject,b3d_qobjadd)
+    else
+      player.chat("error: invalid shape on entry ".. i .."!",0xff0000)
+    end
+  end
+  return b3d_newobject
+end
+
+b3d_scaleobj(object,scf) -- scale given object by given amount
+  local b3d_newobject = {}
+  for i in ipairs(object) do
+    local b3d_objsc = {object[i][1],{},{},{}}
+    if object[i][1][1] == 0 then -- triangle
+      for j=2,4,1 do
+        b3d_objsc[j] = {object[i][j][1]*scf,object[i][j][2]*scf,object[i][j][3]*scf}
+      end
+    elseif object[i][1][1] == 1 then -- quadrilateral
+      for j=2,5,1 do
+        b3d_objsc[j] = {object[i][j][1]*scf,object[i][j][2]*scf,object[i][j][3]*scf}
       end
     else
       player.chat("error: invalid shape on entry ".. i .."!",0xff0000)
     end
-    
+    table.insert(b3d_newobject,b3d_objsc)
   end
   return b3d_newobject
 end
+
+
+
+    
