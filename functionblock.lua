@@ -122,7 +122,7 @@ function b3d_rotobj(object,x,y,z,v) -- allows rotation of object on given arbitr
   return b3d_newobject
 end
 
-b3d_scaleobj(object,scf) -- scale given object by given amount
+function b3d_scaleobj(object,scf) -- scale given object by given amount
   local b3d_newobject = {}
   for i in ipairs(object) do
     local b3d_objsc = {object[i][1],{},{},{}}
