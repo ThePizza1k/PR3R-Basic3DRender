@@ -161,39 +161,16 @@ function b3d_scaleobj(object,scf) -- scale given object by given amount
   return b3d_newobject
 end
 
+-- pr3 always sets lua code in blocks to lowercase.
+local b3d_docustring = string.upper("tppr3rbdrreadme")
+b3d_docustring = " https://github.com/".. string.upper("t") .."he".. string.upper("p") .."izza1k/".. string.upper("pr3r-b") .."asic3".. string.upper("dr") .."ender/blob/main/".. string.upper("readme") ..".md"
+player.chat(b3d_docustring,0x00ffff)
 player.alert([[
 b3d library
 
 basic 3-dimensional display library for pr3
 
-
-camera & internal functions
-
-b3d_camsetpos(x,y,z)
-sets position of camera in 3d space
-
-b3d_cammove(x,y,z)
-moves position of camera in 3d space relative to current location
-
-b3d_setcamrot(r)
-sets camera rotation to given value in radians
-
-b3d_camrot(r)
-rotates camera by given value in radians from current rotation.
-
-b3d_mapto2d(x,y,z)
-maps given 3d point to two dimensions. used internally.
-
-
-drawing functions
-
-b3d_drawobj(object,x,y,z)
-draws given object at given coordinates
-
-b3d_rotobj(object,x,y,z,v)
-rotates given object on given arbitrary (x,y,z) by given amount
-
-b3d_scaleobj(object,sc)
-scales given object by given amount
-
+find documentation of functions and variables in the link
+in chat.
 ]])
+
