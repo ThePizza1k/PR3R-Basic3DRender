@@ -69,11 +69,11 @@ This code uses objects for drawing things in three dimensions.
 Objects are a series of triangles and/or quadrilaterals that are defined in 3d space.
 An example of an object is as follows:
 
-d3tst_object = {
-  {{0,{true,true,true},15},{40,40,40},{-40,40,40},{0,-40,0}},
-  {{0,{true,true,true},15},{40,40,-40},{-40,40,-40},{0,-40,0}},
-  {{0,{true,true,true},15},{40,40,40},{40,40,-40},{0,-40,0}},
-  {{0,{true,true,true},15},{-40,40,40},{-40,40,-40},{0,-40,0}},
+d3tst_object = {         
+  {{0,{true,true,true},15},{40,40,40},{-40,40,40},{0,-40,0}},        
+  {{0,{true,true,true},15},{40,40,-40},{-40,40,-40},{0,-40,0}},      
+  {{0,{true,true,true},15},{40,40,40},{40,40,-40},{0,-40,0}},       
+  {{0,{true,true,true},15},{-40,40,40},{-40,40,-40},{0,-40,0}},      
 }
 
 This creates a square pyramid. No squares are needed, as the bottom lines of each pyramid draw out the square. 
@@ -81,7 +81,7 @@ Remember, this uses wireframe rendering, so you can omit those sorts of things f
 However, this example isn't fully optimized. You can optimize objects by making sure they only draw one line per vector, so that the console isn't made to draw multiple lines over the same area.
 You can resolve this by setting some of the lines to false on the left, in the {true, true, true} brackets. Setting a line to false will not draw that line.
 
-d3tst_objectopt = {
+d3tst_objectopt = {       
   {{0,{true,false,true},15},{40,40,40},{-40,40,40},{0,-40,0}},             
   {{0,{true,true,false},15},{40,40,-40},{-40,40,-40},{0,-40,0}},                  
   {{0,{true,true,false},15},{40,40,40},{40,40,-40},{0,-40,0}},         
