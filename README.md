@@ -82,10 +82,10 @@ However, this example isn't fully optimized. You can optimize objects by making 
 You can resolve this by setting some of the lines to false on the left, in the {true, true, true} brackets. Setting a line to false will not draw that line.
 
 d3tst_objectopt = {
-  {{0,{true,false,true},15},{40,40,40},{-40,40,40},{0,-40,0}}, 
-  {{0,{true,true,false},15},{40,40,-40},{-40,40,-40},{0,-40,0}},
-  {{0,{true,true,false},15},{40,40,40},{40,40,-40},{0,-40,0}},
-  {{0,{true,false,true},15},{-40,40,40},{-40,40,-40},{0,-40,0}},
+  {{0,{true,false,true},15},{40,40,40},{-40,40,40},{0,-40,0}},             
+  {{0,{true,true,false},15},{40,40,-40},{-40,40,-40},{0,-40,0}},                  
+  {{0,{true,true,false},15},{40,40,40},{40,40,-40},{0,-40,0}},         
+  {{0,{true,false,true},15},{-40,40,40},{-40,40,-40},{0,-40,0}},      
 } 
 
 This object is more optimized. It puts less stress on the console, and thus wont be as laggy to look at. You may need to look at it in testing to get it right.
