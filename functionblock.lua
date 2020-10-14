@@ -1,4 +1,3 @@
--- initialize camera vars & constants
 -- b3dcam_ is a prefix before properties of the camera
 b3dcam_pos = {0,0,0} -- defined as a coordinate in 3d space (x,y,z)
 b3dcam_rot = 0 -- defined in radians
@@ -7,8 +6,8 @@ camera only rotates on one axis (left or right)
 this makes things easier on me and i dont have to implement proper 3d rotation
 and complex numbers are cool and i can just use those :)
 ]]--
-b3dcam_foclength = 200 -- defines a constant addition to perspective var to make things look right.
-b3dcam_zoom = 10 -- makes thing bigger
+b3dcam_foclength = 500 -- defines a constant addition to perspective var to make things look right.
+b3dcam_zoom = 1 -- makes thing bigger
 qtnew = quaternion.new
 qtadd = quaternion.add
 qtmul = quaternion.mul
@@ -16,11 +15,25 @@ qtinv = quaternion.inv
 cxnew = complex.new
 cxmul = complex.mul
 
+-- functions start here
 
 function b3drnd(x)
   return math.floor(x+0.5)
 end
+function b3d_foclengthchn(foc) -- changes focal length
+  b3dcam_foclength = b3d_foclength + foc
+end
+function b3d_zoomchn(zm) -- changes zoom
+  b3dcam_zoom = b3dcam_zoom + zm
+end
 
+function b3d_foclengthset(foc) -- sets focal length
+  b3dcam_foclength = foc
+end
+
+function b3d_zoomset(zm) -- changes zoom
+  b3dcam_zoom = zm
+end
 
 
 function b3d_camsetpos(x,y,z) -- puts camera to given xyz
@@ -40,8 +53,10 @@ function b3d_camrot(r) -- rotates camera by given rotation
 end
 
 function b3d_mapto2d(x,y,z) -- maps 3d point to 2d based on given 3d coordinates
-  return {((b3dcam_zoom * x) / (math.abs(z) + b3dcam_foclength))+35,((b3dcam_zoom * y) / (math.abs(z) + b3dcam_foclength))+22}
+  return {((b3dcam_foclength * b3dcam_zoom * x) / (math.abs(z) + b3dcam_foclength))+35,((b3dcam_foclength * b3dcam_zoom * y) / (math.abs(z) + b3dcam_foclength))+22}
 end
+
+-- used in object drawing
 
 b3d_ntabletri = {2,3,1}
 b3d_ntablequad = {2,3,4,1}
@@ -54,8 +69,8 @@ function b3d_drawobj(object,x,y,z)
   for i in ipairs(object) do -- for all triangles/squares in given object table
     local b3d_objtype = object[i][1][1]
     if b3d_objtype == 0 then
-      local b3d_ptrans = {{object[i][2][1],object[i][2][3]},{object[i][3][1],object[i][3][3]},{object[i][4][1],object[i][4][3]}} -- (x,z) format bc y is irrelevant
-      local b3d_ypos = {object[i][2][2],object[i][3][2],object[i][4][2]}
+      local b3d_ptrans = {{object[i][2][1]+b3d_xrel,object[i][2][3]+b3d_zrel},{object[i][3][1]+b3d_xrel,object[i][3][3]+b3d_zrel},{object[i][4][1]+b3d_xrel,object[i][4][3]+b3d_zrel}} -- (x,z) format bc y is irrelevant
+      local b3d_ypos = {object[i][2][2]+b3d_yrel,object[i][3][2]+b3d_yrel,object[i][4][2]+b3d_yrel}
       for g=1,3,1 do
         local b3d_cmtrns = cxnew(b3d_ptrans[g][1],b3d_ptrans[g][2])
         b3d_cmtrns = cxmul(b3d_cmtrns,b3d_camrot)
@@ -182,8 +197,3 @@ b3d_scaleobj(object,sc)
 scales given object by given amount
 
 ]])
-
-
-
-
-    
